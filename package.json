@@ -1,5 +1,5 @@
 {
-  "name": "crypto-prices-backend",
+  "name": "binance-pusher-backend",
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
