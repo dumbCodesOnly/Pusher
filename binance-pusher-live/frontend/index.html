@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Crypto Prices</title>
+  <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
+  <style>
+    body { font-family: Arial; background: #111; color: #eee; }
+    table { border-collapse: collapse; width: 50%; margin: auto; margin-top: 50px; }
+    th, td { border: 1px solid #444; padding: 10px; text-align: center; }
+    th { background: #222; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center">📈 Live Crypto Prices (Binance)</h1>
+  <table id="priceTable">
+    <thead>
+      <tr><th>Symbol</th><th>Price (USD)</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    Pusher.logToConsole = true;
+    const pusher = new Pusher("YOUR_PUSHER_KEY", { cluster: "YOUR_PUSHER_CLUSTER" });
+    const channel = pusher.subscribe("crypto-channel");
+
+    let latestPrices = {};
+
+    channel.bind("prices-update", data => {
+      latestPrices = { ...latestPrices, ...data };
+
+      const tbody = document.querySelector("#priceTable tbody");
+      tbody.innerHTML = "";
+      for(const [symbol, price] of Object.entries(latestPrices)) {
+        tbody.innerHTML += `<tr><td>${symbol}</td><td>$${price.toLocaleString()}</td></tr>`;
+      }
+    });
+  </script>
+</body>
+</html>
